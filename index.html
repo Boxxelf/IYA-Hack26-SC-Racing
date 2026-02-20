@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SC Racing - Trojan Network</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f3f2ef;
+            color: #000000;
+            line-height: 1.6;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #990000 0%, #cc0000 100%);
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo h1 {
+            color: #990000;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .login-form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .login-form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .login-form-group input:focus {
+            outline: none;
+            border-color: #990000;
+        }
+
+        .login-error {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px;
+            background-color: #990000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .login-button:hover {
+            background-color: #cc0000;
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+        }
+
+        .app-container.active {
+            display: block;
+        }
+
+        .header {
+            background-color: #990000;
+            color: white;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-user span {
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 24px;
+        }
+
+        /* Left Sidebar */
+        .sidebar-left {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .profile-header {
+            text-align: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 16px;
+        }
+
+        .profile-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .profile-major {
+            font-size: 14px;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .profile-major input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            width: 100%;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .profile-major input:focus {
+            outline: 2px solid #990000;
+            background: #fff;
+        }
+
+        .profile-major-edit {
+            cursor: pointer;
+            color: #990000;
+            font-size: 12px;
+        }
+
+        .profile-major-edit:hover {
+            text-decoration: underline;
+        }
+
+        .profile-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            background: linear-gradient(135deg, #990000 0%, #FFCC00 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+        }
+
+        .trojan-links {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .trojan-links li {
+            margin-bottom: 8px;
+        }
+
+        .trojan-links a {
+            color: #990000;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .trojan-links a:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Center Feed */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .post-composer {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+        }
+
+        .composer-input {
+            width: 100%;
+            min-height: 80px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .composer-input:focus {
+            outline: none;
+            border-color: #990000;
+        }
+
+        .composer-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+
+        .composer-button {
+            background-color: #990000;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .composer-button:hover {
+            background-color: #cc0000;
+        }
+
+        .post {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .post-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #990000 0%, #FFCC00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .post-author {
+            flex: 1;
+        }
+
+        .post-author-name {
+            font-weight: 600;
+            color: #000;
+            font-size: 15px;
+        }
+
+        .post-author-title {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .post-content {
+            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #000;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .post-action:hover {
+            background-color: #f5f5f5;
+        }
+
+        .post-action.liked {
+            color: #990000;
+        }
+
+        .post-action svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .comments-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .comment-input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: #990000;
+        }
+
+        .comment-button {
+            background-color: #990000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .comment-button:hover {
+            background-color: #cc0000;
+        }
+
+        .comments-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #990000 0%, #FFCC00 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+            background: #f5f5f5;
+            padding: 10px 12px;
+            border-radius: 12px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 13px;
+            color: #000;
+            margin-bottom: 4px;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: #000;
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .widget {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+            margin-bottom: 16px;
+        }
+
+        .widget-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 16px;
+        }
+
+        .game-widget {
+            text-align: center;
+        }
+
+        .game-iframe-container {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .game-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .play-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #990000;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .play-button:hover {
+            background-color: #cc0000;
+        }
+
+        .leaderboard {
+            margin-top: 16px;
+        }
+
+        .leaderboard-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 12px;
+            text-align: left;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            font-weight: 600;
+            color: #990000;
+            width: 24px;
+        }
+
+        .leaderboard-name {
+            flex: 1;
+            font-size: 14px;
+            color: #000;
+        }
+
+        .leaderboard-time {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 95%;
+            height: 95%;
+            background: white;
+            border-radius: 12px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background-color: #f5f5f5;
+        }
+
+        .modal-body {
+            flex: 1;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .modal-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 240px 1fr 280px;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-left,
+            .sidebar-right {
+                position: static;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .header-user {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginContainer">
+        <div class="login-box">
+            <div class="login-logo">
+                <h1>SC Racing</h1>
+            </div>
+            <form id="loginForm">
+                <div class="login-form-group">
+                    <label for="email">USC Email</label>
+                    <input type="email" id="email" placeholder="yourname@usc.edu" required>
+                    <div class="login-error" id="emailError">Please use a valid @usc.edu email address</div>
+                </div>
+                <div class="login-form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" placeholder="Enter your name" required>
+                </div>
+                <button type="submit" class="login-button">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="appContainer">
+        <header class="header">
+            <div class="header-content">
+                <div class="header-logo">SC Racing</div>
+                <div class="header-user">
+                    <span id="headerUserName">User</span>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Sidebar -->
+            <aside class="sidebar-left">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-logo">USC</div>
+                        <div class="profile-name" id="profileName">User</div>
+                        <div class="profile-major">
+                            <input type="text" id="majorInput" value="Computer Science" placeholder="Your Major">
+                            <span class="profile-major-edit" id="editMajor">Edit</span>
+                        </div>
+                    </div>
+                    <ul class="trojan-links">
+                        <li><a href="#">Trojan Network</a></li>
+                        <li><a href="#">Viterbi School</a></li>
+                        <li><a href="#">Marshall School</a></li>
+                        <li><a href="#">Student Organizations</a></li>
+                        <li><a href="#">Campus Events</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- Center Feed -->
+            <main class="feed">
+                <div class="post-composer">
+                    <textarea class="composer-input" id="composerInput" placeholder="Share with the Trojan Network..."></textarea>
+                    <div class="composer-actions">
+                        <button class="composer-button" id="postButton">Post</button>
+                    </div>
+                </div>
+
+                <div id="postsContainer">
+                    <!-- Posts will be dynamically inserted here -->
+                </div>
+            </main>
+
+            <!-- Right Sidebar -->
+            <aside class="sidebar-right">
+                <div class="widget game-widget">
+                    <h3 class="widget-title">Cardinal Course Daily Challenge</h3>
+                    <div class="game-iframe-container">
+                        <iframe class="game-iframe" src="https://play.rosebud.ai/p/cardinal-course" title="Cardinal Course Game"></iframe>
+                    </div>
+                    <button class="play-button" id="playButton">Play Now</button>
+                    <div class="leaderboard">
+                        <div class="leaderboard-title">Today's Leaderboard</div>
+                        <ul class="leaderboard-list">
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">1</span>
+                                <span class="leaderboard-name">Sarah Chen</span>
+                                <span class="leaderboard-time">1:23.45</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">2</span>
+                                <span class="leaderboard-name">Michael Rodriguez</span>
+                                <span class="leaderboard-time">1:25.12</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">3</span>
+                                <span class="leaderboard-name">Emily Johnson</span>
+                                <span class="leaderboard-time">1:26.78</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">4</span>
+                                <span class="leaderboard-name">David Kim</span>
+                                <span class="leaderboard-time">1:28.34</span>
+                            </li>
+                            <li class="leaderboard-item">
+                                <span class="leaderboard-rank">5</span>
+                                <span class="leaderboard-name">Jessica Martinez</span>
+                                <span class="leaderboard-time">1:29.56</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Game Modal -->
+    <div class="modal" id="gameModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Cardinal Course Daily Challenge</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <iframe class="modal-iframe" src="https://play.rosebud.ai/p/cardinal-course" title="Cardinal Course Game"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const userData = localStorage.getItem('scRacingUser');
+        if (userData) {
+            const user = JSON.parse(userData);
+            showApp(user);
+        }
+
+        // Login form handler
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+            const emailError = document.getElementById('emailError');
+
+            if (!email.endsWith('@usc.edu')) {
+                emailError.style.display = 'block';
+                return;
+            }
+
+            emailError.style.display = 'none';
+            const user = { email, name };
+            localStorage.setItem('scRacingUser', JSON.stringify(user));
+            showApp(user);
+        });
+
+        // Logout handler
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('scRacingUser');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('appContainer').classList.remove('active');
+        });
+
+        // Show app
+        function showApp(user) {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('appContainer').classList.add('active');
+            document.getElementById('headerUserName').textContent = user.name;
+            document.getElementById('profileName').textContent = user.name;
+            initializeApp();
+        }
+
+        // Initialize app features
+        function initializeApp() {
+            // Major editor
+            const majorInput = document.getElementById('majorInput');
+            const editMajor = document.getElementById('editMajor');
+            let isEditing = false;
+
+            editMajor.addEventListener('click', () => {
+                if (!isEditing) {
+                    majorInput.focus();
+                    majorInput.select();
+                    isEditing = true;
+                }
+            });
+
+            majorInput.addEventListener('blur', () => {
+                isEditing = false;
+            });
+
+            // Post composer
+            document.getElementById('postButton').addEventListener('click', () => {
+                const content = document.getElementById('composerInput').value.trim();
+                if (content) {
+                    const user = JSON.parse(localStorage.getItem('scRacingUser'));
+                    addPost(user.name, user.name.split(' ').map(n => n[0]).join(''), content);
+                    document.getElementById('composerInput').value = '';
+                }
+            });
+
+            // Game modal
+            document.getElementById('playButton').addEventListener('click', () => {
+                document.getElementById('gameModal').classList.add('active');
+            });
+
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('gameModal').classList.remove('active');
+            });
+
+            document.getElementById('gameModal').addEventListener('click', (e) => {
+                if (e.target.id === 'gameModal') {
+                    document.getElementById('gameModal').classList.remove('active');
+                }
+            });
+
+            // Load hardcoded posts
+            loadHardcodedPosts();
+        }
+
+        // Hardcoded posts data
+        const hardcodedPosts = [
+            {
+                name: 'Alex Thompson',
+                initials: 'AT',
+                title: 'Viterbi School of Engineering',
+                content: 'Just finished an amazing internship at a tech startup in Silicon Beach! The experience working with USC alumni was incredible. Fight On!',
+                likes: 42,
+                comments: []
+            },
+            {
+                name: 'Maria Garcia',
+                initials: 'MG',
+                title: 'Marshall School of Business',
+                content: 'Tommy Trojan looking extra majestic today! Perfect weather for studying on the lawn. Who else is loving this campus vibe?',
+                likes: 28,
+                comments: []
+            },
+            {
+                name: 'James Park',
+                initials: 'JP',
+                title: 'Computer Science Major',
+                content: 'Viterbi career fair was a huge success! Met so many amazing companies. The Trojan Network is truly powerful. Fight On!',
+                likes: 56,
+                comments: []
+            },
+            {
+                name: 'Sophie Williams',
+                initials: 'SW',
+                title: 'Business Administration',
+                content: 'Just joined the USC Racing team! Can\'t wait to work on the Formula SAE car. The engineering spirit here is unmatched.',
+                likes: 34,
+                comments: []
+            },
+            {
+                name: 'Ryan Chen',
+                initials: 'RC',
+                title: 'Electrical Engineering',
+                content: 'Game day energy is unreal! The Coliseum was packed and the spirit was electric. We are SC!',
+                likes: 67,
+                comments: []
+            }
+        ];
+
+        function loadHardcodedPosts() {
+            const container = document.getElementById('postsContainer');
+            hardcodedPosts.forEach((post, index) => {
+                addPost(post.name, post.initials, post.content, post.likes, post.comments, index);
+            });
+        }
+
+        function addPost(name, initials, content, likes = 0, comments = [], postId = null) {
+            const postIdValue = postId !== null ? postId : Date.now();
+            const container = document.getElementById('postsContainer');
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+            postDiv.dataset.postId = postIdValue;
+
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <div class="post-avatar">${initials}</div>
+                    <div class="post-author">
+                        <div class="post-author-name">${name}</div>
+                        <div class="post-author-title">USC Student</div>
+                    </div>
+                </div>
+                <div class="post-content">${content}</div>
+                <div class="post-actions">
+                    <button class="post-action like-button" data-post-id="${postIdValue}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                        <span class="like-count">${likes}</span>
+                    </button>
+                    <button class="post-action comment-toggle" data-post-id="${postIdValue}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>Comment</span>
+                    </button>
+                </div>
+                <div class="comments-section" id="comments-${postIdValue}" style="display: none;">
+                    <div class="comment-input-group">
+                        <input type="text" class="comment-input" id="comment-input-${postIdValue}" placeholder="Write a comment...">
+                        <button class="comment-button" data-post-id="${postIdValue}">Post</button>
+                    </div>
+                    <div class="comments-list" id="comments-list-${postIdValue}">
+                        ${comments.map(comment => `
+                            <div class="comment">
+                                <div class="comment-avatar">${comment.initials}</div>
+                                <div class="comment-content">
+                                    <div class="comment-author">${comment.name}</div>
+                                    <div class="comment-text">${comment.text}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            container.insertBefore(postDiv, container.firstChild);
+
+            // Like button handler
+            const likeButton = postDiv.querySelector('.like-button');
+            let isLiked = false;
+            likeButton.addEventListener('click', () => {
+                const likeCount = likeButton.querySelector('.like-count');
+                let count = parseInt(likeCount.textContent);
+                if (isLiked) {
+                    count--;
+                    likeButton.classList.remove('liked');
+                } else {
+                    count++;
+                    likeButton.classList.add('liked');
+                }
+                likeCount.textContent = count;
+                isLiked = !isLiked;
+            });
+
+            // Comment toggle
+            const commentToggle = postDiv.querySelector('.comment-toggle');
+            const commentsSection = postDiv.querySelector(`#comments-${postIdValue}`);
+            commentToggle.addEventListener('click', () => {
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            });
+
+            // Comment submit
+            const commentButton = postDiv.querySelector('.comment-button');
+            const commentInput = postDiv.querySelector(`#comment-input-${postIdValue}`);
+            const commentsList = postDiv.querySelector(`#comments-list-${postIdValue}`);
+
+            commentButton.addEventListener('click', () => {
+                const commentText = commentInput.value.trim();
+                if (commentText) {
+                    const user = JSON.parse(localStorage.getItem('scRacingUser'));
+                    const userInitials = user.name.split(' ').map(n => n[0]).join('');
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    commentDiv.innerHTML = `
+                        <div class="comment-avatar">${userInitials}</div>
+                        <div class="comment-content">
+                            <div class="comment-author">${user.name}</div>
+                            <div class="comment-text">${commentText}</div>
+                        </div>
+                    `;
+                    commentsList.appendChild(commentDiv);
+                    commentInput.value = '';
+                }
+            });
+
+            commentInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    commentButton.click();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
